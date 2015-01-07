@@ -15,7 +15,10 @@ exports.config =
       order:
         before: [
           'bower_components/modernizr/modernizr.js',
-          'bower_components/jquery/jquery.js'
+          'bower_components/jquery/jquery.js',
+          'bower_components/underscore/underscore.js',
+          'bower_components/backbone/backbone.js',
+          'bower_components/swing/dist/swing.js'
         ]
 
     stylesheets:
