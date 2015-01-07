@@ -1,3 +1,64 @@
 $(function () {
     $(document).foundation();
+
+    var Echonest = getEchonest();
+    window.stack = undefined;
+
+    var genres = new Backbone.Collection([], window.models.Genre)
+
+    function onSongSelect(song) {
+        console.log("SONG " + JSON.stringify(song.toJSON()) + " was selected")
+    }
+
+    function onGenreSelect(genre) {
+        Echonest.getStaticGenrePlaylist({
+            genre: genre.get('name'),
+            callback: function(songJsons) {
+                _.each(songJsons, window.models.Song.transformEchonestProps)
+                var songs = new Backbone.Collection(songJsons, window.models.Song)
+                setupStack(songs, onSongSelect)
+            }
+        })
+    }
+
+    function setupStack(collection, onSelectFn) {
+        var $stack = $('#stack');
+            stack = gajus.Swing.Stack();
+
+        $stack.find('.card').each(function() {
+            var $card = $(this),
+                card = $card.data('card')
+
+            card.throwOut(gajus.Swing.Card.DIRECTION_LEFT, Math.floor(Math.random() * 100 - 50));
+        })
+
+        collection.each(function(model) {
+            var $element = $('<li/>').addClass('card').text(model.get('name'))
+            $stack.append($element)
+
+            var card = stack.createCard($element[0])
+
+            $element.data('card', card)
+
+            $element.addClass('in-deck');
+
+            card.on('throwoutleft', function (e) {
+                console.log(e.target.innerText || e.target.textContent, 'has been thrown out of the stack to the', e.throwDirection == 1 ? 'right' : 'left', 'direction.');
+
+                card.destroy()
+                $element.remove()
+            });
+
+            card.on('throwoutright', function(e) {
+                console.log(e.target.innerText || e.target.textContent, 'has been thrown out of the stack to the', e.throwDirection == 1 ? 'right' : 'left', 'direction.');
+
+                onSelectFn(model)
+            })
+        });
+    }
+
+    Echonest.listGenres(function(genreJsons) {
+        genres.reset(genreJsons)
+        setupStack(genres, onGenreSelect)
+    })
 });

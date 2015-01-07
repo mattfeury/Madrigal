@@ -2,4 +2,15 @@
 @import "../bower_components/foundation/scss/foundation";
 @import "bourbon";
 
-//Your Custom Styles bellow
+#stack {
+    width: 100px;
+    margin: auto;
+}
+li.card {
+    display: block;
+    width: 100px;
+    height: 100px;
+    background: gray;
+    margin: 1em auto;
+    position: absolute;
+}
