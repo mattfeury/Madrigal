@@ -64,13 +64,13 @@ $(function () {
 
                     songs = filterSongCollection(songs, 'previewUrl')
 
-                    setupStack(songs, onSongSelect)
+                    setupStack(songs, window.views.SongCardView, onSongSelect)
                 })
             }
         })
     }
 
-    function setupStack(collection, onSelectFn) {
+    function setupStack(collection, cardView, onSelectFn) {
         var $stack = $('#stack');
             stack = gajus.Swing.Stack();
 
@@ -82,26 +82,28 @@ $(function () {
         })
 
         collection.each(function(model) {
-            var $element = $('<li/>').addClass('card').text(model.get('name'))
-            $stack.append($element)
+            var view = new cardView({ model: model })
+            $stack.append(view.render().$el)
 
-            var card = stack.createCard($element[0])
+            var card = stack.createCard(view.el)
 
-            $element.data('card', card)
+            view.$el.data('card', card)
 
-            $element.addClass('in-deck');
 
             card.on('throwoutleft', function (e) {
                 console.log(e.target.innerText || e.target.textContent, 'has been thrown out of the stack to the', e.throwDirection == 1 ? 'right' : 'left', 'direction.');
-
-                card.destroy()
-                $element.remove()
             });
 
             card.on('throwoutright', function(e) {
                 console.log(e.target.innerText || e.target.textContent, 'has been thrown out of the stack to the', e.throwDirection == 1 ? 'right' : 'left', 'direction.');
 
                 onSelectFn(model)
+            })
+
+            card.on('throwoutend', function(e) {
+                card.destroy()
+                view.$el.remove()
+                view.remove()
             })
         });
     }
@@ -111,6 +113,6 @@ $(function () {
 
     Echonest.listGenres(function(genreJsons) {
         genres.reset(genreJsons)
-        setupStack(genres, onGenreSelect)
+        setupStack(genres, window.views.GenreCardView, onGenreSelect)
     })
 });

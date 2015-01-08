@@ -1,5 +1,29 @@
 (function() {
     window.models = {};
+    window.views = {};
+
+    var CardView = Backbone.View.extend({
+        tagName: "li",
+        className: "card",
+
+        render: function() {
+            var template = $(this.template).html(),
+                tmpl = _.template(template);
+
+            this.$el.html(tmpl(this.model || {}));
+
+            return this;
+        }
+    })
+
+    window.views.SongCardView = CardView.extend({
+        className: "song " + CardView.prototype.className,
+        template: "#song-card-template"
+    })
+    window.views.GenreCardView = CardView.extend({
+        className: "genre " + CardView.prototype.className,
+        template: "#genre-card-template"
+    })
 
     window.models.Genre = Backbone.Model.extend({
         defaults: {
