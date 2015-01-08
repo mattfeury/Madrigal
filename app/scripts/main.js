@@ -106,6 +106,9 @@ $(function () {
         });
     }
 
+    $.ajaxSettings.traditional = true;
+    $.ajaxSetup({ cache: true });
+
     Echonest.listGenres(function(genreJsons) {
         genres.reset(genreJsons)
         setupStack(genres, onGenreSelect)
