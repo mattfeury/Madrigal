@@ -72,7 +72,11 @@ $(function () {
 
     function setupStack(collection, cardView, onSelectFn) {
         var $stack = $('#stack');
-            stack = gajus.Swing.Stack();
+            stack = gajus.Swing.Stack({
+                isThrowOut: function(offset, element, confidence) {
+                    return confidence >= .5
+                }
+            });
 
         $stack.find('.card').each(function() {
             var $card = $(this),
