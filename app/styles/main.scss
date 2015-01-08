@@ -9,6 +9,8 @@ $cardSize: 250px;
     width: $cardSize;
     height: $cardSize;
     margin: auto;
+
+    background: url('/radio.svg') no-repeat 50% 50%;
 }
 li.card {
     display: block;
