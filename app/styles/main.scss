@@ -1,6 +1,7 @@
 @import "_settings";
 @import "../bower_components/foundation/scss/foundation";
 @import "bourbon";
+@import "_bourbon-extensions.scss";
 
 #stack {
     width: 100px;
@@ -13,4 +14,15 @@ li.card {
     background: gray;
     margin: 1em auto;
     position: absolute;
+
+    text-align: center;
+    padding: 1em;
+
+    @include display(flex);
+    @include flex-direction(column);
+    @include justify-content(center);
+
+    p {
+        font-size: 2em;
+    }
 }

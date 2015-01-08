@@ -1,0 +1,110 @@
+// Bower-Bourbon is old and doesn't have these latest mixins!
+// CSS3 Flexible Box Model and property defaults
+// Unified attributes for 2009, 2011, and 2012 flavours.
+
+// 2009 - display (box | inline-box)
+// 2011 - display (flexbox | inline-flexbox)
+// 2012 - display (flex | inline-flex)
+@mixin display($value) {
+// flex | inline-flex
+  @if $value == "flex" {
+    // 2009
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+
+    // 2012
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox; // 2011 (IE 10)
+    display: flex;
+  }
+
+  @else if $value == "inline-flex" {
+    display: -webkit-inline-box;
+    display: -moz-inline-box;
+    display: inline-box;
+
+    display: -webkit-inline-flex;
+    display: -moz-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+  }
+
+  @else {
+    display: $value;
+  }
+}
+// 2009 - box-orient ( horizontal | vertical | inline-axis | block-axis)
+//      - box-direction (normal | reverse)
+// 2011 - flex-direction (row | row-reverse | column | column-reverse)
+// 2012 - flex-direction (row | row-reverse | column | column-reverse)
+@mixin flex-direction($value: row) {
+
+  // Alt values.
+  $value-2009: $value;
+  $value-2011: $value;
+  $direction: "normal";
+
+  @if $value == row {
+    $value-2009: horizontal;
+  }
+
+  @else if $value == "row-reverse" {
+    $value-2009: horizontal;
+    $direction: reverse;
+  }
+
+  @else if $value == column {
+    $value-2009: vertical;
+  }
+
+  @else if $value == "column-reverse" {
+    $value-2009: vertical;
+    $direction: reverse;
+  }
+
+  // 2009
+  @include prefixer(box-orient, $value-2009, webkit moz spec);
+  @if $direction == "reverse" {
+    @include prefixer(box-direction, $direction, webkit moz spec);
+  }
+
+  // 2012
+  @include prefixer(flex-direction, $value, webkit moz spec);
+
+  // 2011 (IE 10)
+  -ms-flex-direction: $value;
+}
+// 2009 - box-pack (start | end | center | justify)
+// 2011 - flex-pack (start | end | center | justify)
+// 2012 - justify-content (flex-start | flex-end | center | space-between | space-around)
+@mixin justify-content($value: flex-start) {
+
+  // Alt values.
+  $alt-value: $value;
+  @if $value == "flex-start" {
+    $alt-value: start;
+  }
+
+  @else if $value == "flex-end" {
+    $alt-value: end;
+  }
+
+  @else if $value == "space-between" {
+    $alt-value: justify;
+  }
+
+  @else if $value == "space-around" {
+    $alt-value: distribute;
+  }
+
+  // 2009
+  @include prefixer(box-pack, $alt-value, webkit moz spec);
+
+  // 2012
+  @include prefixer(justify-content, $value, webkit moz ms o spec);
+
+  // 2011 (IE 10)
+  -ms-flex-pack: $alt-value;
+}
