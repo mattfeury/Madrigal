@@ -3,15 +3,20 @@
 @import "bourbon";
 @import "_bourbon-extensions.scss";
 
+$cardSize: 250px;
+
 #stack {
-    width: 100px;
+    width: $cardSize;
+    height: $cardSize;
     margin: auto;
 }
 li.card {
     display: block;
-    width: 100px;
-    height: 100px;
-    background: gray;
+    width: $cardSize;
+    height: $cardSize;
+    background: #CCC;
+    border: 3px solid gray;
+    border-radius: 5px;
     margin: 1em auto;
     position: absolute;
 
