@@ -10,7 +10,10 @@ $(function () {
 
     window.stack = undefined;
 
-    var genres = new Backbone.Collection([], window.models.Genre)
+    var genres = new (Backbone.Collection.extend({
+        model: window.models.Genre,
+        comparator: function(a) { return Math.random() }
+    }))([])
 
     function playNextSong() {
         var nextSong = playlist.shift()
