@@ -1,13 +1,46 @@
 $(function () {
     $(document).foundation();
 
-    var Echonest = getEchonest();
+    var player,
+        playlist = new Backbone.Collection([], { model: models.Song }),
+
+        Echonest = getEchonest(),
+        Spotify = getSpotify(),
+        AudioEngine = getAudioEngine();
+
     window.stack = undefined;
 
     var genres = new Backbone.Collection([], window.models.Genre)
 
+    function playNextSong() {
+        var nextSong = playlist.shift()
+
+        if (! nextSong) {
+            return
+        }
+
+        AudioEngine.playUrl(nextSong.get('previewUrl'))
+    }
+
+    AudioEngine.onEnd(function() {
+        playNextSong()
+    })
+
+    playlist.on('add', function() {
+        if (AudioEngine.isPaused()) {
+            playNextSong()
+        }
+    })
+
     function onSongSelect(song) {
-        console.log("SONG " + JSON.stringify(song.toJSON()) + " was selected")
+        playlist.add(song)
+    }
+
+    function filterSongCollection(collection, prop) {
+        return new Backbone.Collection(
+            collection.filter(function(_) { return _.get(prop) }),
+            { model: window.models.Song }
+        )
     }
 
     function onGenreSelect(genre) {
@@ -15,8 +48,21 @@ $(function () {
             genre: genre.get('name'),
             callback: function(songJsons) {
                 _.each(songJsons, window.models.Song.transformEchonestProps)
-                var songs = new Backbone.Collection(songJsons, window.models.Song)
-                setupStack(songs, onSongSelect)
+
+                var songs = new Backbone.Collection(songJsons, { model: window.models.Song })
+                songs = filterSongCollection(songs, 'id')
+
+                var spotifyIds = songs.pluck('id')
+                Spotify.getTracks(spotifyIds, function(response) {
+                    _.each(response.tracks, function(track) {
+                        var song = songs.get(track.id)
+                        song.setSpotifyTrackInfo(track)
+                    })
+
+                    songs = filterSongCollection(songs, 'previewUrl')
+
+                    setupStack(songs, onSongSelect)
+                })
             }
         })
     }
