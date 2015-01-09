@@ -3,6 +3,32 @@
 @import "bourbon";
 @import "_bourbon-extensions.scss";
 
+
+@include keyframes(bounceInLeft) {
+    0% {
+        opacity: 0;
+        @include transform(translateX(-2000px));
+    }
+    60% {
+        opacity: 1;
+        @include transform(translateX(30px));
+    }
+    80% {
+        @include transform(translateX(-10px));
+    }
+    100% {
+        opacity: 1;
+        @include transform(translateX(0));
+    }
+}
+
+@mixin bounceInLeft() {
+    @include animation-name(bounceInLeft);
+    @include animation-duration(1s);
+    @include animation-delay(0s);
+    @include animation-timing-function(cubic-bezier(0.215, 0.610, 0.355, 1.000));
+}
+
 $cardSize: 250px;
 
 #stack {
@@ -12,6 +38,8 @@ $cardSize: 250px;
 
     background: url('/radio.svg') no-repeat 50% 50%;
 }
+
+$maxCards: 25;
 li.card {
     display: block;
     width: $cardSize;
@@ -28,6 +56,14 @@ li.card {
     @include display(flex);
     @include flex-direction(column);
     @include justify-content(center);
+
+    @include bounceInLeft();
+
+    @for $i from 0 through $maxCards {
+        &:nth-child(#{$i}) {
+            @include animation-duration(#{1 + $i / $maxCards}s);
+        }
+    }
 
     p {
         font-size: 2em;
