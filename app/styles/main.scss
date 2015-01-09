@@ -69,3 +69,18 @@ li.card {
         font-size: 2em;
     }
 }
+
+li.song.card {
+    img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0.25;
+    }
+
+    p {
+        position: relative;
+    }
+}
