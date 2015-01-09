@@ -3,12 +3,16 @@ $(function () {
 
     var player,
         playlist = new Backbone.Collection([], { model: models.Song }),
+        stack = gajus.Swing.Stack({
+            isThrowOut: function(offset, element, confidence) {
+                return confidence >= .5
+            }
+        }),
+
 
         Echonest = getEchonest(),
         Spotify = getSpotify(),
         AudioEngine = getAudioEngine();
-
-    window.stack = undefined;
 
     var genres = new (Backbone.Collection.extend({
         model: window.models.Genre,
@@ -64,28 +68,30 @@ $(function () {
 
                     songs = filterSongCollection(songs, 'previewUrl')
 
-                    setupStack(songs, window.views.SongCardView, onSongSelect)
+                    emptyStack()
+                    addToStack(songs, window.views.SongCardView, onSongSelect)
                 })
             }
         })
     }
 
-    function setupStack(collection, cardView, onSelectFn) {
-        var $stack = $('#stack');
-            stack = gajus.Swing.Stack({
-                isThrowOut: function(offset, element, confidence) {
-                    return confidence >= .5
-                }
-            });
-
-        $stack.find('.card').each(function() {
+    function emptyStack() {
+        $('#stack .card').each(function() {
             var $card = $(this),
                 card = $card.data('card')
 
             card.throwOut(gajus.Swing.Card.DIRECTION_LEFT, Math.floor(Math.random() * 100 - 50));
         })
+    }
 
-        collection.each(function(model) {
+    var STACK_LENGTH = 20;
+    function addToStack(collection, cardView, onSelectFn) {
+        var $stack = $('#stack');
+
+        var modelsToStack = collection.slice(0, STACK_LENGTH),
+            modelsToWait = collection.slice(STACK_LENGTH)
+
+        _.each(modelsToStack, function(model) {
             var view = new cardView({ model: model })
             $stack.append(view.render().$el)
 
@@ -108,6 +114,14 @@ $(function () {
                 card.destroy()
                 view.$el.remove()
                 view.remove()
+
+                if (! $('.card').length) {
+                    addToStack(
+                        new Backbone.Collection(modelsToWait, { model: collection.model }),
+                        cardView,
+                        onSelectFn
+                    )
+                }
             })
         });
     }
@@ -117,6 +131,7 @@ $(function () {
 
     Echonest.listGenres(function(genreJsons) {
         genres.reset(genreJsons)
-        setupStack(genres, window.views.GenreCardView, onGenreSelect)
+        emptyStack()
+        addToStack(genres, window.views.GenreCardView, onGenreSelect)
     })
 });
