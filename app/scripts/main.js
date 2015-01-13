@@ -80,12 +80,16 @@ $(function () {
                     songs = filterSongCollection(songs, 'previewUrl')
 
                     emptyStack()
-                    addToStack(songs, window.views.SongCardView, {
-                        onSelect: onSongSelect,
-                        onIndecision: function() {
-                            onEmptyGenre(genre)
-                        }
-                    })
+                    if (songs.length > 0) {
+                        addToStack(songs, window.views.SongCardView, {
+                            onSelect: onSongSelect,
+                            onIndecision: function() {
+                                onEmptyGenre(genre)
+                            }
+                        })
+                    } else {
+                        onEmptyGenre(genre)
+                    }
                 })
             }
         })
