@@ -1,6 +1,12 @@
 $(function () {
     $(document).foundation();
 
+    $(document)
+        .on('choose-genres', showGenres)
+        .on('select-genre', function(event, genre) {
+            onGenreSelect(genre)
+        })
+
     var player,
         playlist = new Backbone.Collection([], { model: models.Song }),
         stack = gajus.Swing.Stack({
@@ -50,6 +56,11 @@ $(function () {
         )
     }
 
+    function onEmptyGenre(genre) {
+        $('#notice').html(new views.EmptyGenreView({ model: genre }).render().$el)
+        $('body').addClass('showingNotice')
+    }
+
     function onGenreSelect(genre) {
         Echonest.getStaticGenrePlaylist({
             genre: genre.get('name'),
@@ -69,9 +80,26 @@ $(function () {
                     songs = filterSongCollection(songs, 'previewUrl')
 
                     emptyStack()
-                    addToStack(songs, window.views.SongCardView, onSongSelect)
+                    addToStack(songs, window.views.SongCardView, {
+                        onSelect: onSongSelect,
+                        onIndecision: function() {
+                            onEmptyGenre(genre)
+                        }
+                    })
                 })
             }
+        })
+    }
+
+    function removeGenre(genre) {
+        genres.remove(genre)
+    }
+
+    function showGenres() {
+        emptyStack()
+        addToStack(genres, window.views.GenreCardView, {
+            onSelect: onGenreSelect,
+            onDecline: removeGenre
         })
     }
 
@@ -86,6 +114,7 @@ $(function () {
 
     var STACK_LENGTH = 20;
     function addToStack(collection, cardView, callbacks) {
+        $('body').removeClass('showingNotice')
         var $stack = $('#stack');
 
         var modelsToStack = collection.slice(0, STACK_LENGTH),
@@ -141,7 +170,6 @@ $(function () {
 
     Echonest.listGenres(function(genreJsons) {
         genres.reset(genreJsons)
-        emptyStack()
-        addToStack(genres, window.views.GenreCardView, onGenreSelect)
+        showGenres()
     })
 });

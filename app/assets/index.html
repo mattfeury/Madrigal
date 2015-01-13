@@ -14,6 +14,15 @@
 </div>
 <ul id="stack">
 </ul>
+<div id="notice"></div>
+
+<script id="empty-genre-template" type="text/template">
+    <p>There are no more songs left in this genre</p>
+    <ul class="stack-for-small round secondary button-group">
+        <li><a href="#" class="chooseGenres button">Choose More Genres</a></li>
+        <li><a href="#" class="selectGenre button">Load More Songs</a></li>
+    </ul>
+</script>
 
 <script id="genre-card-template" type="text/template">
     <p class="name"><%= get('name') %></p>

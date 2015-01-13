@@ -31,10 +31,15 @@
 
 $cardSize: 250px;
 
-#stack {
+#stack, #notice {
     width: $cardSize;
     height: $cardSize;
     margin: auto;
+}
+
+body {
+    padding-top: 1em;
+}
 
     background: url('/radio.svg') no-repeat 50% 50%;
 }
@@ -67,6 +72,27 @@ li.card {
 
     p {
         font-size: 2em;
+    }
+}
+
+#notice {
+    display: none;
+
+    text-align: center;
+
+    > div {
+        display: table-cell;
+        vertical-align: middle;
+    }
+}
+
+body.showingNotice {
+    #notice {
+        display: table;
+    }
+
+    #stack {
+        display: none;
     }
 }
 

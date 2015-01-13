@@ -16,6 +16,26 @@
         }
     })
 
+    window.views.EmptyGenreView = Backbone.View.extend({
+        events: {
+            'click .chooseGenres': function() {
+                $(document).trigger('choose-genres')
+            },
+            'click .selectGenre': function() {
+                $(document).trigger('select-genre', this.model)
+            }
+        },
+        render: function() {
+            var template = $('#empty-genre-template').html(),
+                tmpl = _.template(template);
+
+            this.$el.html(tmpl(this.model || {}));
+
+            return this;
+        }
+    })
+
+
     window.views.SongCardView = CardView.extend({
         className: "song " + CardView.prototype.className,
         template: "#song-card-template"
