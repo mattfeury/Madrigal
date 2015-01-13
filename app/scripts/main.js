@@ -133,18 +133,13 @@ $(function () {
 
             view.$el.data('card', card)
 
-
             card.on('throwoutleft', function (e) {
-                console.log(e.target.innerText || e.target.textContent, 'has been thrown out of the stack to the', e.throwDirection == 1 ? 'right' : 'left', 'direction.');
-
                 if (typeof callbacks.onDecline == 'function') {
                     callbacks.onDecline(model)
                 }
             });
 
             card.on('throwoutright', function(e) {
-                console.log(e.target.innerText || e.target.textContent, 'has been thrown out of the stack to the', e.throwDirection == 1 ? 'right' : 'left', 'direction.');
-
                 if (typeof callbacks.onSelect == 'function') {
                     callbacks.onSelect(model)
                 }
