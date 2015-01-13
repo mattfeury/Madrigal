@@ -41,7 +41,13 @@ body {
     padding-top: 1em;
 }
 
-    background: url('/radio.svg') no-repeat 50% 50%;
+body, h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cabin', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+}
+
+h1 {
+    font-weight: bold;
+    text-align: center;
 }
 
 $maxCards: 25;
