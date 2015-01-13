@@ -85,7 +85,7 @@ $(function () {
     }
 
     var STACK_LENGTH = 20;
-    function addToStack(collection, cardView, onSelectFn) {
+    function addToStack(collection, cardView, callbacks) {
         var $stack = $('#stack');
 
         var modelsToStack = collection.slice(0, STACK_LENGTH),
@@ -102,12 +102,18 @@ $(function () {
 
             card.on('throwoutleft', function (e) {
                 console.log(e.target.innerText || e.target.textContent, 'has been thrown out of the stack to the', e.throwDirection == 1 ? 'right' : 'left', 'direction.');
+
+                if (typeof callbacks.onDecline == 'function') {
+                    callbacks.onDecline(model)
+                }
             });
 
             card.on('throwoutright', function(e) {
                 console.log(e.target.innerText || e.target.textContent, 'has been thrown out of the stack to the', e.throwDirection == 1 ? 'right' : 'left', 'direction.');
 
-                onSelectFn(model)
+                if (typeof callbacks.onSelect == 'function') {
+                    callbacks.onSelect(model)
+                }
             })
 
             card.on('throwoutend', function(e) {
@@ -116,11 +122,15 @@ $(function () {
                 view.remove()
 
                 if (! $('.card').length) {
-                    addToStack(
-                        new Backbone.Collection(modelsToWait, { model: collection.model }),
-                        cardView,
-                        onSelectFn
-                    )
+                    if (modelsToWait.length) {
+                        addToStack(
+                            new Backbone.Collection(modelsToWait, { model: collection.model }),
+                            cardView,
+                            callbacks
+                        )
+                    } else if (typeof callbacks.onIndecision == 'function') {
+                        callbacks.onIndecision(model)
+                    }
                 }
             })
         });
