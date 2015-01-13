@@ -112,7 +112,8 @@ $(function () {
             var $card = $(this),
                 card = $card.data('card')
 
-            card.throwOut(gajus.Swing.Card.DIRECTION_LEFT, Math.floor(Math.random() * 100 - 50));
+            card.destroy()
+            $card.remove()
         })
     }
 
