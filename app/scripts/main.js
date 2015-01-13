@@ -166,7 +166,7 @@ $(function () {
     }
 
     $.ajaxSettings.traditional = true;
-    $.ajaxSetup({ cache: true });
+    $.ajaxSetup({ cache: false });
 
     Echonest.listGenres(function(genreJsons) {
         genres.reset(genreJsons)
