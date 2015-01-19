@@ -7,7 +7,7 @@ function getEchonest() {
 
         $.getJSON(url, {
             api_key: apiKey,
-            results: 20,
+            results: 2000,
             bucket: ["description"]
         }, function(data) {
             callback(data.response.genres)
@@ -30,7 +30,7 @@ function getEchonest() {
         _.defaults(options, {
             genre: "Chillwave",
             preset: GenrePlaylistPresets.CORE_SHUFFLED,
-            results: 12
+            results: 50 // This is spotify's max
         })
 
         $.getJSON(url, {
