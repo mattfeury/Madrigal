@@ -33,6 +33,7 @@ $(function () {
         }
 
         AudioEngine.playUrl(nextSong.get('previewUrl'))
+        $('footer').text('Now Playing: ' + nextSong.get('artist') + " - " + nextSong.get('title')).show()
     }
 
     AudioEngine.onEnd(function() {
