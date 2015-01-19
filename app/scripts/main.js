@@ -20,10 +20,7 @@ $(function () {
         Spotify = getSpotify(),
         AudioEngine = getAudioEngine();
 
-    var genres = new (Backbone.Collection.extend({
-        model: window.models.Genre,
-        comparator: function(a) { return Math.random() }
-    }))([])
+    var genres = new Backbone.Collection([], { model: models.Genre })
 
     function playNextSong() {
         var nextSong = playlist.shift()
@@ -171,6 +168,7 @@ $(function () {
 
     Echonest.listGenres(function(genreJsons) {
         genres.reset(genreJsons)
+        genres.reset(genres.shuffle())
         showGenres()
     })
 });
