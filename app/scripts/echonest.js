@@ -1,6 +1,6 @@
 function getEchonest() {
     var host = 'http://developer.echonest.com/api/v4/',
-        apiKey =  'TBD';
+        apiKey =  'JMR2E8WCUFYOSVGN9';
 
     var listGenres = function(callback) {
         var url = host + "genre/list";
