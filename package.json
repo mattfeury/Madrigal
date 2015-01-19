@@ -13,6 +13,7 @@
     "test": "brunch test"
   },
   "dependencies": {
+    "bower": "1.3.12",
     "statik": ">= 1.1.0",
     "brunch": "1.x",
     "clean-css-brunch": ">= 1.0 < 1.8",
