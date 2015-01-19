@@ -55,6 +55,13 @@ h1 {
     text-align: center;
 }
 
+#instructions {
+    text-align: center;
+    p {
+        margin-bottom: 0;
+    }
+}
+
 $maxCards: 25;
 li.card {
     display: block;
