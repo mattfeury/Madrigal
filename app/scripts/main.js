@@ -124,7 +124,9 @@ $(function () {
         $('body').removeClass('showingNotice')
         var $stack = $('#stack');
 
-        var modelsToStack = collection.slice(0, STACK_LENGTH),
+        // Reverse the models to stack since we have to append the cards.
+        // This way we honor the order of the collection
+        var modelsToStack = collection.slice(0, STACK_LENGTH).reverse(),
             modelsToWait = collection.slice(STACK_LENGTH)
 
         _.each(modelsToStack, function(model) {
@@ -173,6 +175,21 @@ $(function () {
     Echonest.listGenres(function(genreJsons) {
         genres.reset(genreJsons)
         genres.reset(genres.shuffle())
+
+        var cannedGenres = _.map([
+            "jazz",
+            "metal",
+            "neo-psychedelic",
+            "indie rock",
+            "classic rock",
+            "pop",
+            "alternative country"
+        ], function(n) {
+            return new models.Genre({ name: n })
+        })
+
+        genres.unshift(cannedGenres, { index: 0 })
+
         showGenres()
     })
 });
