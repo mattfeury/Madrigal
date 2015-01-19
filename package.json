@@ -8,7 +8,7 @@
     "url": ""
   },
   "scripts": {
-    "postinstall": "brunch build --optimize",
+    "postinstall": "bower install && brunch build --optimize",
     "start": "brunch watch --server",
     "test": "brunch test"
   },
