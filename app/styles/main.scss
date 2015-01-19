@@ -30,6 +30,9 @@
 }
 
 $cardSize: 250px;
+$cardColor: #B3C7B5;
+$bgColor: #E2E5E2;
+$textColor: rgb(52, 81, 55);
 
 #stack, #notice {
     width: $cardSize;
@@ -43,11 +46,13 @@ $cardSize: 250px;
 }
 
 body {
+    background: $bgColor;
     padding-top: 1em;
 }
 
 body, h1, h2, h3, h4, h5, h6 {
     font-family: 'Cabin', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+    color: $textColor;
 }
 
 footer {
@@ -56,6 +61,9 @@ footer {
     left: 0;
     right: 0;
     padding: 1em;
+
+    background: $textColor;
+    color: $bgColor;
 
     display: none;
 }
@@ -77,9 +85,9 @@ li.card {
     display: block;
     width: $cardSize;
     height: $cardSize;
-    background: #CCC;
-    border: 3px solid gray;
-    border-radius: 5px;
+    background: $cardColor;
+    border: 3px solid $textColor;
+    border-radius: 30px;
     margin: 1em auto;
     position: absolute;
 
@@ -131,10 +139,12 @@ li.song.card {
         top: 0;
         right: 0;
         bottom: 0;
-        opacity: 0.25;
+        opacity: 0.2;
     }
 
     p {
         position: relative;
+        text-shadow: 0 0 10px white;
+        line-height: 1em;
     }
 }
