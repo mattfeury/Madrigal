@@ -45,6 +45,7 @@ $(function () {
 
     function onSongSelect(song) {
         playlist.add(song)
+        mixpanel.track("Select Song", song.toJSON())
     }
 
     function filterSongCollection(collection, prop) {
@@ -57,9 +58,12 @@ $(function () {
     function onEmptyGenre(genre) {
         $('#notice').html(new views.EmptyGenreView({ model: genre }).render().$el)
         $('body').addClass('showingNotice')
+        mixpanel.track("Show Empty Genre Notice", { genre: genre.get('name') })
     }
 
     function onGenreSelect(genre) {
+        mixpanel.track("Select Genre", { genre: genre.get('name') })
+
         Echonest.getStaticGenrePlaylist({
             genre: genre.get('name'),
             callback: function(songJsons) {
