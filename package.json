@@ -8,10 +8,13 @@
     "url": ""
   },
   "scripts": {
+    "postinstall": "brunch build --optimize",
     "start": "brunch watch --server",
     "test": "brunch test"
   },
   "dependencies": {
+    "statik": ">= 1.1.0",
+    "brunch": "1.x",
     "clean-css-brunch": ">= 1.0 < 1.8",
     "css-brunch": ">= 1.0 < 1.8",
     "javascript-brunch": ">= 1.0 < 1.8",
