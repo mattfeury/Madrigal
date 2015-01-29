@@ -98,6 +98,8 @@ $(function () {
 
     function onGenreSelect(genre) {
         mixpanel.track("Select Genre", { genre: genre.get('name') })
+        var $stack = $('#stack')
+        $stack.addClass('loading')
 
         $.when(
             getSongsForGenre(genre, Echonest.GenrePlaylistPresets.CORE_SHUFFLED),
@@ -108,6 +110,7 @@ $(function () {
             songs.add(inRotationSongs.models)
             songs.reset(songs.shuffle())
 
+            $stack.removeClass('loading')
             emptyStack()
             if (songs.length > 0) {
                 addToStack(songs, window.views.SongCardView, {

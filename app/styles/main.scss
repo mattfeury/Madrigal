@@ -43,6 +43,15 @@ $textColor: rgb(52, 81, 55);
 #stack {
     background: url('/radio.gif') no-repeat 50% 50%;
     background-size: 50% 50%;
+
+    li {
+        opacity: 1;
+        @include transition(opacity 0.3s);
+    }
+
+    &.loading li {
+        opacity: 0;
+    }
 }
 
 body {
