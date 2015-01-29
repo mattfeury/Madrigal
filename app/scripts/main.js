@@ -51,6 +51,8 @@ $(function () {
 
     function onSongSelect(song) {
         playlist.add(song)
+        $('#swipe-instructions').text("Groovy! Keep swiping to add songs to the queue.")
+
         mixpanel.track("Select Song", song.toJSON())
     }
 
