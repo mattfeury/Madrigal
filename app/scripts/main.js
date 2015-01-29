@@ -117,7 +117,6 @@ $(function () {
             songs.add(inRotationSongs.models)
             songs.reset(songs.shuffle())
 
-            $stack.removeClass('loading')
             emptyStack()
             if (songs.length > 0) {
                 addToStack(songs, window.views.SongCardView, {
@@ -149,13 +148,15 @@ $(function () {
     }
 
     function emptyStack() {
-        $('#stack .card').each(function() {
-            var $card = $(this),
-                card = $card.data('card')
+        $('#stack')
+            .removeClass('loading')
+            .find('.card').each(function() {
+                var $card = $(this),
+                    card = $card.data('card')
 
-            card.destroy()
-            $card.remove()
-        })
+                card.destroy()
+                $card.remove()
+            })
     }
 
     // Sucks to have to detect device, but Android gets super laggy with many cards
