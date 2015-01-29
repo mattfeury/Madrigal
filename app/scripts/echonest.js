@@ -30,6 +30,7 @@ function getEchonest() {
         _.defaults(options, {
             genre: "Chillwave",
             preset: GenrePlaylistPresets.CORE_SHUFFLED,
+            onFailure: function() {},
             results: 50 // This is spotify's max
         })
 
@@ -43,7 +44,7 @@ function getEchonest() {
             genre: options.genre
         }, function(data) {
             options.callback(data.response.songs)
-        });
+        }).fail(options.onFailure);
     }
 
     return {

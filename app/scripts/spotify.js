@@ -40,12 +40,12 @@ function getAudioEngine() {
 function getSpotify() {
     var host = "https://api.spotify.com/v1/";
 
-    var getTracks = function(ids, callback) {
+    var getTracks = function(ids, callback, onFailure) {
         var url = host + 'tracks?ids=' + ids.join(",");
 
         $.getJSON(url, function(results) {
             callback(results);
-        });
+        }).fail(onFailure);
     }
 
     return {

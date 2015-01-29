@@ -72,6 +72,10 @@ $(function () {
     function getSongsForGenre(genre, playlistPreset) {
         var deferred = $.Deferred();
 
+        var onFailure = function onFailure(jqXHR, textStatus, errorThrown) {
+            deferred.reject(jqXHR && jqXHR.responseText)
+        }
+
         Echonest.getStaticGenrePlaylist({
             genre: genre.get('name'),
             preset: playlistPreset,
@@ -91,8 +95,9 @@ $(function () {
                     songs = filterSongCollection(songs, 'previewUrl')
 
                     deferred.resolve(songs)
-                })
-            }
+                }, onFailure)
+            },
+            onFailure: onFailure
         })
 
         return deferred.promise()
@@ -124,6 +129,10 @@ $(function () {
             } else {
                 onEmptyGenre(genre)
             }
+        }).fail(function(error) {
+            alert("Uh oh. The singer tripped over the guitarist's cord and everything got unplugged. Try again maybe")
+            onEmptyGenre(genre)
+            mixpanel.track("Error getting songs", { genre: genre.get('name'), error: error })
         })
     }
 
