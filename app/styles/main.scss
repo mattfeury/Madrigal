@@ -142,6 +142,13 @@ li.song.card {
         right: 0;
         bottom: 0;
         opacity: 0.2;
+        display: none;
+    }
+
+    &:last-child, &:nth-last-child(2) {
+        img {
+            display: block;
+        }
     }
 
     p {
