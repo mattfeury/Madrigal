@@ -67,11 +67,12 @@ $(function () {
         mixpanel.track("Show Empty Genre Notice", { genre: genre.get('name') })
     }
 
-    function onGenreSelect(genre) {
-        mixpanel.track("Select Genre", { genre: genre.get('name') })
+    function getSongsForGenre(genre, playlistPreset) {
+        var deferred = $.Deferred();
 
         Echonest.getStaticGenrePlaylist({
             genre: genre.get('name'),
+            preset: playlistPreset,
             callback: function(songJsons) {
                 _.each(songJsons, window.models.Song.transformEchonestProps)
 
@@ -87,18 +88,36 @@ $(function () {
 
                     songs = filterSongCollection(songs, 'previewUrl')
 
-                    emptyStack()
-                    if (songs.length > 0) {
-                        addToStack(songs, window.views.SongCardView, {
-                            onSelect: onSongSelect,
-                            onIndecision: function() {
-                                onEmptyGenre(genre)
-                            }
-                        })
-                    } else {
+                    deferred.resolve(songs)
+                })
+            }
+        })
+
+        return deferred.promise()
+    }
+
+    function onGenreSelect(genre) {
+        mixpanel.track("Select Genre", { genre: genre.get('name') })
+
+        $.when(
+            getSongsForGenre(genre, Echonest.GenrePlaylistPresets.CORE_SHUFFLED),
+            getSongsForGenre(genre, Echonest.GenrePlaylistPresets.IN_ROTATION_SHUFFLED)
+        ).done(function(coreSongs, inRotationSongs) {
+            var songs = new Backbone.Collection([], { model: window.models.Song })
+            songs.add(coreSongs.models)
+            songs.add(inRotationSongs.models)
+            songs.reset(songs.shuffle())
+
+            emptyStack()
+            if (songs.length > 0) {
+                addToStack(songs, window.views.SongCardView, {
+                    onSelect: onSongSelect,
+                    onIndecision: function() {
                         onEmptyGenre(genre)
                     }
                 })
+            } else {
+                onEmptyGenre(genre)
             }
         })
     }
