@@ -1,3 +1,9 @@
+// Yucky but Android seems super laggy
+function isAndroid() {
+    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    return userAgent.match(/Android/i)
+}
+
 $(function () {
     $(document).foundation();
 
@@ -119,7 +125,8 @@ $(function () {
         })
     }
 
-    var STACK_LENGTH = 20;
+    // Sucks to have to detect device, but Android gets super laggy with many cards
+    var STACK_LENGTH = isAndroid() ? 7 : 20;
     function addToStack(collection, cardView, callbacks) {
         $('body').removeClass('showingNotice')
         var $stack = $('#stack');
